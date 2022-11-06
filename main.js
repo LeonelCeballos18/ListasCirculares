@@ -65,9 +65,10 @@ class ListaCircular{
     }
 
     imprimir(){
-        let lista = `Ruta: ${this.primero.nombre}, Tiempo: ${this.primero.minutos} \n`;
+        let lista = "";
         let aux = this.primero.sig;
         if(this.primero != null){
+            lista+=`Ruta: ${this.primero.nombre}, Tiempo: ${this.primero.minutos} \n`;
             while(aux != this.primero){
                 lista+= `Ruta: ${aux.nombre}, Tiempo: ${aux.minutos} \n`;
                 aux = aux.sig;
@@ -115,6 +116,6 @@ recorridoRuta.agregar(ruta);
 console.log(recorridoRuta.imprimir());
 recorridoRuta.eliminar("A23");
 //console.log(recorridoRuta);
-console.log(recorridoRuta.buscar("A12").info());
+//console.log(recorridoRuta.buscar("A20").info());
 console.log(recorridoRuta.imprimir());
-console.log(recorridoRuta.recorrido("A12", 12, 30, 20, 20));
+//console.log(recorridoRuta.recorrido("A20", 12, 30, 20, 20));
