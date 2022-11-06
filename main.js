@@ -5,6 +5,10 @@ class Nodo{
         this.sig = null;
         this.ant = null;
     }
+
+    info(){
+        return `Ruta: ${this.nombre}, Tiempo: ${this.minutos} \n`;
+    }
 }
 
 class ListaCircular{
@@ -29,16 +33,16 @@ class ListaCircular{
         let aux = this.primero.sig;
         if(this.primero != null){
             if(this.primero.nombre === nombre){
-                return `Ruta: ${this.primero.nombre}`;
+                return this.primero;
             }
             while(aux != this.primero){
                 if(aux.nombre === nombre){
-                    return `Ruta: ${aux.nombre}`;
+                    return aux;
                 }
                 aux = aux.sig;
             }
         }
-        return `La ruta no existe`;
+        return null;
     }
 
     eliminar(nombre){
@@ -73,7 +77,31 @@ class ListaCircular{
     }
 
     recorrido(baseInicio, horaInicio, minutoInicio, horaFin, minutoFin){
-        
+        if(!(horaInicio > 24 || horaFin > 24)){
+            let cadena = "---> Recorrido rutas <---\n";
+            let baseI = this.buscar(baseInicio);
+            let aux = this.primero;
+            this.primero = baseI;
+            if(horaFin<horaInicio || horaFin === horaInicio){
+                horaFin+=horaInicio;
+            }
+            let inicioM = (horaInicio * 60) + minutoInicio; 
+            let finM = (horaFin * 60) + minutoFin;
+            while((inicioM+aux.minutos) <= finM){
+                aux = aux.sig;
+                inicioM+=aux.minutos;
+                cadena += `Ruta: ${aux.nombre} Tiempo: ${aux.minutos} Inicio: ${this.conversion((inicioM-aux.minutos))} Fin: ${this.conversion(inicioM)}\n`;
+            }
+            return cadena;
+        }
+        return null;
+    }
+
+    conversion(m){
+        if(m>=1440){
+            return Math.floor((m-1440)/60) +":"+ ((m-1440)%60);
+        }
+        return Math.floor(m/60) +":"+ (m%60);
     }
 }
 
@@ -87,5 +115,6 @@ recorridoRuta.agregar(ruta);
 console.log(recorridoRuta.imprimir());
 recorridoRuta.eliminar("A23");
 //console.log(recorridoRuta);
-console.log(recorridoRuta.buscar("A23"));
+console.log(recorridoRuta.buscar("A12").info());
 console.log(recorridoRuta.imprimir());
+console.log(recorridoRuta.recorrido("A12", 12, 30, 20, 20));
