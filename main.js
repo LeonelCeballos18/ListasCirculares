@@ -29,14 +29,14 @@ class ListaCircular{
         }
     }
 
-    buscar(nombre){
+    buscar(ruta){
         let aux = this.primero.sig;
         if(this.primero != null){
-            if(this.primero.nombre === nombre){
+            if(this.primero.nombre === ruta){
                 return this.primero;
             }
             while(aux != this.primero){
-                if(aux.nombre === nombre){
+                if(aux.nombre === ruta){
                     return aux;
                 }
                 aux = aux.sig;
@@ -45,17 +45,18 @@ class ListaCircular{
         return null;
     }
 
-    eliminar(nombre){
-        let aux = this.primero;
+    eliminar(nombre){ //Error aqui
+        let aux = this.primero.sig;
         if(this.primero !== null){
             if(this.primero.nombre === nombre){
-                this.primero = null;
-                this.primero = aux.sig;
+                this.primero.ant.sig = this.primero.sig
+                this.primero.sig.ant = this.primero.ant; 
+                this.primero = this.primero.sig;
             }else{
-                while(aux.sig != this.primero){
-                    if(aux.sig.nombre === nombre){
-                        aux.sig = aux.sig.sig;
-                        aux.ant = aux.ant;
+                while(aux.nombre != this.primero.nombre){
+                    if(aux.nombre === nombre){
+                        aux.ant.sig = aux.sig; 
+                        aux.sig.ant = aux.ant;
                         break;
                     }
                     aux = aux.sig;
@@ -81,17 +82,16 @@ class ListaCircular{
         if(!(horaInicio > 24 || horaFin > 24)){
             let cadena = "---> Recorrido rutas <---\n";
             let baseI = this.buscar(baseInicio);
-            let aux = this.primero;
-            this.primero = baseI;
+            let aux = baseI;
             if(horaFin<horaInicio || horaFin === horaInicio){
                 horaFin+=horaInicio;
             }
             let inicioM = (horaInicio * 60) + minutoInicio; 
             let finM = (horaFin * 60) + minutoFin;
             while((inicioM+aux.minutos) <= finM){
-                aux = aux.sig;
                 inicioM+=aux.minutos;
                 cadena += `Ruta: ${aux.nombre} Tiempo: ${aux.minutos} Inicio: ${this.conversion((inicioM-aux.minutos))} Fin: ${this.conversion(inicioM)}\n`;
+                aux = aux.sig;
             }
             return cadena;
         }
@@ -115,7 +115,11 @@ ruta = new Nodo("A23", 40);
 recorridoRuta.agregar(ruta);
 console.log(recorridoRuta.imprimir());
 recorridoRuta.eliminar("A23");
-//console.log(recorridoRuta);
-//console.log(recorridoRuta.buscar("A20").info());
+ruta = new Nodo("A16", 25);
+recorridoRuta.agregar(ruta);
+ruta = new Nodo("24", 15);
+recorridoRuta.agregar(ruta);
 console.log(recorridoRuta.imprimir());
-//console.log(recorridoRuta.recorrido("A20", 12, 30, 20, 20));
+//console.log(recorridoRuta);
+console.log(recorridoRuta.buscar("20").info());
+console.log(recorridoRuta.recorrido("24", 12, 30, 20, 20));
